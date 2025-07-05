@@ -1,4 +1,4 @@
-DROP DATABASE TheBasaboostSGdeAlquilerDeVehiculos
+DROP DATABASE IF EXISTS TheBasaboostSGdeAlquilerDeVehiculos;
 CREATE DATABASE TheBasaboostSGdeAlquilerDeVehiculos;
 USE TheBasaboostSGdeAlquilerDeVehiculos;
 
@@ -11,10 +11,10 @@ CREATE TABLE DEPARTAMENTO(
 
 CREATE TABLE EMPLEADO(
 	id_empleado SMALLINT PRIMARY KEY IDENTITY,
-	nombre VARCHAR(100),
-	direccion VARCHAR(100),
-	email VARCHAR(100),
-	telefono VARCHAR(100),
+	nombre VARCHAR(50),
+	direccion VARCHAR(80),
+	email VARCHAR(40),
+	telefono VARCHAR(14),
 	fecha_contratacion DATE,
 	id_puesto TINYINT
 );
@@ -38,14 +38,14 @@ CREATE TABLE MANTENIMIENTO(
 	matricula varchar(10)
 	fecha DATE,
 	descripcion VARCHAR(60),
-	costo DECIMAL(5,2)
+	costo DECIMAL(6,2)
 	id_empleado SMALLINT
 );
 
 CREATE TABLE CLIENTE(
 	id_cliente VARCHAR(15) PRIMARY KEY,
 	nombre VARCHAR(50),
-	direccion VARCHAR(100),
+	direccion VARCHAR(80),
 	email varchar(40),
 	num_licencia VARCHAR(12),
 	telefono VARCHAR(13),
@@ -67,6 +67,13 @@ CREATE TABLE ESTADO_RESERVA(
     estado_v VARCHAR(40)
 );
 
+CREATE TABLE SERVICIOS_ADICIONALES(
+    id_servicio_adicional VARCHAR(15) PRIMARY KEY,
+    nombre VARCHAR(35),
+    costo DECIMAL(7, 2),
+    descripcion VARCHAR(80)
+);
+
 -- Intersección Reserva-Servicios Adicionales
 CREATE TABLE SERVICIO_RESERVA (
     id_reserva VARCHAR(15) NOT NULL,
@@ -76,29 +83,60 @@ CREATE TABLE SERVICIO_RESERVA (
     FOREIGN KEY (id_servicio_adicional) REFERENCES SERVICIOS_ADICIONALES(id_servicio_adicional)
 );
 
-CREATE TABLE SERVICIOS_ADICIONALES(
-    id_servicio_adicional VARCHAR(15) PRIMARY KEY,
-    nombre VARCHAR(35),
-    costo DECIMAL(7, 2),
-    descripcion VARCHAR(80)
-);
-
 CREATE TABLE PAGO (
-    id_pago VARCHAR(10) PRIMARY KEY,
+    id_pago VARCHAR(15) PRIMARY KEY,
     id_reserva VARCHAR(15),	
     monto DECIMAL(8, 2),
     fecha_pago DATE,
     id_metodo_pago VARCHAR(10)	
 );
 
-CREATE TABLE METODO (
+CREATE TABLE METODO_PAGO (
     id_metodo_pago VARCHAR(10) PRIMARY KEY,
     metodo_pago VARCHAR(30)
+);
+
+CREATE TABLE MODELO_VEHICULO (
+    id_modelo SMALLINT UNSIGNED PRIMARY KEY,
+    modelo VARCHAR(30) NOT NULL
+);
+
+--Tablas que eliminan el mushco a muchos en la tabla "vehiculos"
+
+CREATE TABLE MARCA_VEHICULO (
+    id_marca SMALLINT PRIMARY KEY,
+    marca VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE TIPO_VEHICULO (
+    id_tipo SMALLINT PRIMARY KEY,
+    tipo VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE ESTADO_VEHICULO (
+    id_estado_v SMALLINT PRIMARY KEY,
+    estado_v VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE VEHICULOS (
+    matricula VARCHAR(10) PRIMARY KEY,
+    id_marca SMALLINT NOT NULL,
+    id_modelo SMALLINT NOT NULL,
+    anio DATE NOT NULL,
+    id_tipo SMALLINT NOT NULL,
+    precio_diario DECIMAL(8,2) NOT NULL,
+    id_estado_v SMALLINT UNSIGNED NOT NULL,
+    id_empleado SMALLINT UNSIGNED NOT NULL,
+    FOREIGN KEY (id_marca) REFERENCES MARCA_VEHICULO(id_marca),
+    FOREIGN KEY (id_modelo) REFERENCES MODELO_VEHICULO(id_modelo),
+    FOREIGN KEY (id_tipo) REFERENCES TIPO_VEHICULO(id_tipo),
+    FOREIGN KEY (id_estado_v) REFERENCES ESTADO_VEHICULO(id_estado_v)
 );
 
 -- FOREIGN KEYS:
 ALTER TABLE EMPLEADO ADD FOREIGN KEY(id_puesto) REFERENCES PUESTO_EMPLEADO(id_puesto) ON DELETE CASCADE;
 ALTER TABLE MANTENIMIENTO ADD FOREIGN KEY(id_empleado) REFERENCES EMPLEADO(id_empleado) ON DELETE CASCADE;
+ALTER TABLE MANTENIMIENTO ADD FOREIGN KEY(matricula) REFERENCES VEHICULOS(matricula) ON DELETE CASCADE;
 --- Falta el FK de matricula en la tabla de Mantenimiento
 ALTER TABLE RESERVA ADD FOREIGN KEY (id_cliente) REFERENCES CLIENTE(id_cliente) ON DELETE CASCADE;
 ------ Descomentar cuando esté la tabla de Vehículo: ALTER TABLE RESERVA ADD FOREIGN KEY (matricula) REFERENCES VEHICULO(matricula)
@@ -108,39 +146,5 @@ ALTER TABLE PAGO ADD FOREIGN KEY (id_metodo_pago) REFERENCES METODO(id_metodo_pa
 ALTER TABLE SERVICIO_RESERVA ADD FOREIGN KEY (id_servicio_adicional) REFERENCES SERVICIOS_ADICIONALES(id_servicio_adicional) ON DELETE CASCADE;
 ALTER TABLE SERVICIO_RESERVA ADD FOREIGN KEY (id_reserva) REFERENCES RESERVA(id_reserva) ON DELETE CASCADE;
 
-CREATE TABLE MODELO_VEHICULO (
-    id_modelo SMALLINT UNSIGNED PRIMARY KEY,
-    modelo VARCHAR(30) NOT NULL
-);
-
-CREATE TABLE MARCA_VEHICULO (
-    id_marca SMALLINT UNSIGNED PRIMARY KEY,
-    marca VARCHAR(30) NOT NULL
-);
-
-CREATE TABLE TIPO_VEHICULO (
-    id_tipo SMALLINT UNSIGNED PRIMARY KEY,
-    tipo VARCHAR(30) NOT NULL
-);
-
-CREATE TABLE ESTADO_VEHICULO (
-    id_estado_v SMALLINT UNSIGNED PRIMARY KEY,
-    estado_v VARCHAR(30) NOT NULL
-);
-
-CREATE TABLE VEHICULOS (
-    matricula VARCHAR(10) PRIMARY KEY,
-    id_marca SMALLINT UNSIGNED NOT NULL,
-    id_modelo SMALLINT UNSIGNED NOT NULL,
-    anio DATE NOT NULL,
-    id_tipo SMALLINT UNSIGNED NOT NULL,
-    precio_diario DECIMAL(8,2) NOT NULL,
-    id_estado_v SMALLINT UNSIGNED NOT NULL,
-    id_empleado SMALLINT UNSIGNED NOT NULL,
-    FOREIGN KEY (id_marca) REFERENCES MARCA_VEHICULO(id_marca),
-    FOREIGN KEY (id_modelo) REFERENCES MODELO_VEHICULO(id_modelo),
-    FOREIGN KEY (id_tipo) REFERENCES TIPO_VEHICULO(id_tipo),
-    FOREIGN KEY (id_estado_v) REFERENCES ESTADO_VEHICULO(id_estado_v)
-);
 
 
