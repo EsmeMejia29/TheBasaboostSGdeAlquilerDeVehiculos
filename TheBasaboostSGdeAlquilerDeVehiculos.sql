@@ -26,11 +26,11 @@ CREATE TABLE PUESTO_EMPLEADO(
 
 --  Intersección Empleado-Departamento
 CREATE TABLE EMPLEADO_DEPARTAMENTO (
-    id_empleado SMALLINT NOT NULL,
-    id_departamento TINYINT NOT NULL,
-    PRIMARY KEY (id_empleado, id_departamento),
-    FOREIGN KEY (id_empleado) REFERENCES EMPLEADO(id_empleado),
-    FOREIGN KEY (id_departamento) REFERENCES DEPARTAMENTO(id_departamento)
+   	id_empleado SMALLINT NOT NULL,
+   	id_departamento TINYINT NOT NULL,
+  	PRIMARY KEY (id_empleado, id_departamento),
+    	FOREIGN KEY (id_empleado) REFERENCES EMPLEADO(id_empleado),
+    	FOREIGN KEY (id_departamento) REFERENCES DEPARTAMENTO(id_departamento)
 );
 
 CREATE TABLE MANTENIMIENTO(
@@ -44,34 +44,34 @@ CREATE TABLE MANTENIMIENTO(
 
 --Tablas que eliminan el muchos a muchos en la tabla "vehiculos"
 CREATE TABLE MODELO_VEHICULO (
-    id_modelo SMALLINT PRIMARY KEY,
-    modelo VARCHAR(50) NOT NULL
+    	id_modelo SMALLINT PRIMARY KEY,
+   	modelo VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE MARCA_VEHICULO (
-    id_marca SMALLINT PRIMARY KEY,
-    marca VARCHAR(30) NOT NULL
+        id_marca SMALLINT PRIMARY KEY,
+    	marca VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE TIPO_VEHICULO (
-    id_tipo SMALLINT PRIMARY KEY,
-    tipo VARCHAR(30) NOT NULL
+    	id_tipo SMALLINT PRIMARY KEY,
+    	tipo VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE ESTADO_VEHICULO (
-    id_estado_v SMALLINT PRIMARY KEY,
-    estado_v VARCHAR(30) NOT NULL
+    	id_estado_v SMALLINT PRIMARY KEY,
+    	estado_v VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE VEHICULOS (
-    matricula VARCHAR(10) PRIMARY KEY,
-    id_marca SMALLINT NOT NULL,
-    id_modelo SMALLINT NOT NULL,
-    anio DATE NOT NULL,
-    id_tipo SMALLINT NOT NULL,
-    precio_diario DECIMAL(8,2) NOT NULL,
-    id_estado_v SMALLINT NOT NULL,
-    id_empleado SMALLINT NOT NULL,
+    	matricula VARCHAR(10) PRIMARY KEY,
+    	id_marca SMALLINT NOT NULL,
+    	id_modelo SMALLINT NOT NULL,
+    	anio DATE NOT NULL,
+    	id_tipo SMALLINT NOT NULL,
+    	precio_diario DECIMAL(8,2) NOT NULL,
+    	id_estado_v SMALLINT NOT NULL,
+    	id_empleado SMALLINT NOT NULL,
 );
 
 CREATE TABLE CLIENTE(
@@ -85,45 +85,45 @@ CREATE TABLE CLIENTE(
 );
 
 CREATE TABLE RESERVA(
-    id_reserva VARCHAR(15) PRIMARY KEY,
-    id_cliente VARCHAR(15),
-    matricula VARCHAR(50),
-    fecha_inicio_alquiler DATE,
-    fecha_fin_alquiler DATE,
-    id_estado_r VARCHAR(12),
-    kilometraje_estimado INT
+    	id_reserva VARCHAR(15) PRIMARY KEY,
+    	id_cliente VARCHAR(15),
+    	matricula VARCHAR(10),
+    	fecha_inicio_alquiler DATE,
+    	fecha_fin_alquiler DATE,
+    	id_estado_r VARCHAR(12),
+    	kilometraje_estimado INT
 );
 
 CREATE TABLE ESTADO_RESERVA(
-    id_estado_r VARCHAR(12) PRIMARY KEY,
-    estado_v VARCHAR(40)
+    	id_estado_r VARCHAR(12) PRIMARY KEY,
+    	estado_v VARCHAR(40)
 );
 
 CREATE TABLE SERVICIO_RESERVA (
-    id_reserva VARCHAR(15) NOT NULL,
-    id_servicio_adicional VARCHAR(15) NOT NULL,
-    PRIMARY KEY (id_reserva, id_servicio_adicional)
+    	id_reserva VARCHAR(15) NOT NULL,
+    	id_servicio_adicional VARCHAR(15) NOT NULL,
+    	PRIMARY KEY (id_reserva, id_servicio_adicional)
 );
 
 -- Intersección Reserva-Servicios Adicionales
 CREATE TABLE SERVICIOS_ADICIONALES(
-    id_servicio_adicional VARCHAR(15) PRIMARY KEY,
-    nombre VARCHAR(35),
-    costo DECIMAL(7, 2),
-    descripcion VARCHAR(80)
+    	id_servicio_adicional VARCHAR(15) PRIMARY KEY,
+    	nombre VARCHAR(35),
+    	costo DECIMAL(7, 2),
+    	descripcion VARCHAR(80)
 );
 
 CREATE TABLE PAGO (
-    id_pago VARCHAR(15) PRIMARY KEY,
-    id_reserva VARCHAR(15),	
-    monto DECIMAL(8, 2),
-    fecha_pago DATE,
-    id_metodo_pago VARCHAR(10)	
+    	id_pago VARCHAR(15) PRIMARY KEY,
+    	id_reserva VARCHAR(15),	
+   	monto DECIMAL(8, 2),
+    	fecha_pago DATE,
+    	id_metodo_pago VARCHAR(10)	
 );
 
 CREATE TABLE METODO_PAGO (
-    id_metodo_pago VARCHAR(10) PRIMARY KEY,
-    metodo_pago VARCHAR(30)
+    	id_metodo_pago VARCHAR(10) PRIMARY KEY,
+    	metodo_pago VARCHAR(30)
 );
 
 -- FOREIGN KEYS:
