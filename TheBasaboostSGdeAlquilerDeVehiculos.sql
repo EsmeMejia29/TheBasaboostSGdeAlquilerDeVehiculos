@@ -86,7 +86,7 @@ CREATE TABLE CLIENTE(
 
 CREATE TABLE RESERVA(
     id_reserva VARCHAR(15) PRIMARY KEY,
-    id_cliente VARCHAR(50),
+    id_cliente VARCHAR(15),
     matricula VARCHAR(50),
     fecha_inicio_alquiler DATE,
     fecha_fin_alquiler DATE,
