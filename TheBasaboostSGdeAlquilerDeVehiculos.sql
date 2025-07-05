@@ -7,9 +7,7 @@ USE TheBasaboostSGdeAlquilerDeVehiculos;
 CREATE TABLE DEPARTAMENTO(
 	id_departamento TINYINT PRIMARY KEY IDENTITY,
 	nombre_departamento VARCHAR(35),
-	direccion VARCHAR(100),
-	telefono CHAR(10),
-	correo VARCHAR(50)
+	id_empleado SMALLINT 
 );
 
 CREATE TABLE EMPLEADO(
@@ -38,6 +36,7 @@ CREATE TABLE CLIENTE(
 	id_cliente VARCHAR(15) PRIMARY KEY,
 	nombre VARCHAR(50),
 	direccion VARCHAR(100),
+	correo_electronico varchar(50),
 	num_licencia VARCHAR(12),
 	telefono VARCHAR(13),
 	fecha_registro DATE
