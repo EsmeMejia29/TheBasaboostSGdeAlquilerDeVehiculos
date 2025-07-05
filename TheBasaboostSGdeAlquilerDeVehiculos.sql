@@ -77,7 +77,7 @@ CREATE TABLE VEHICULOS (
 CREATE TABLE CLIENTE(
 	id_cliente VARCHAR(15) PRIMARY KEY,
 	nombre VARCHAR(50) NOT NULL,
-	direccion VARCHAR(80),
+	direccion VARCHAR(200),
 	email varchar(40) NOT NULL,
 	num_licencia VARCHAR(12) NOT NULL,
 	telefono VARCHAR(13) NOT NULL,
