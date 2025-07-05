@@ -6,7 +6,7 @@ USE TheBasaboostSGdeAlquilerDeVehiculos;
 --- TABLAS:
 CREATE TABLE DEPARTAMENTO(
 	id_departamento TINYINT PRIMARY KEY IDENTITY,
-	nombre_departamento VARCHAR(35),
+	nombre_departamento VARCHAR(35)
 );
 
 CREATE TABLE EMPLEADO(
@@ -15,7 +15,7 @@ CREATE TABLE EMPLEADO(
 	direccion VARCHAR(100),
 	email VARCHAR(100),
 	telefono VARCHAR(100),
-	fecha_contratacion DATE
+	fecha_contratacion DATE,
 	id_puesto TINYINT
 );
 
@@ -97,7 +97,6 @@ CREATE TABLE METODO (
 );
 
 -- FOREIGN KEYS:
-ALTER TABLE DEPARTAMENTO ADD FOREIGN KEY(id_empleado) REFERENCES PUESTO_EMPLEADO(id_empleado) ON DELETE CASCADE;
 ALTER TABLE EMPLEADO ADD FOREIGN KEY(id_puesto) REFERENCES PUESTO_EMPLEADO(id_puesto) ON DELETE CASCADE;
 ALTER TABLE MANTENIMIENTO ADD FOREIGN KEY(id_empleado) REFERENCES EMPLEADO(id_empleado) ON DELETE CASCADE;
 --- Falta el FK de matricula en la tabla de Mantenimiento
