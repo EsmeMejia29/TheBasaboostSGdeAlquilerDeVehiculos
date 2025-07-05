@@ -7,7 +7,6 @@ USE TheBasaboostSGdeAlquilerDeVehiculos;
 CREATE TABLE DEPARTAMENTO(
 	id_departamento TINYINT PRIMARY KEY IDENTITY,
 	nombre_departamento VARCHAR(35),
-	id_empleado SMALLINT 
 );
 
 CREATE TABLE EMPLEADO(
