@@ -16,6 +16,7 @@ CREATE TABLE EMPLEADO(
 	email VARCHAR(100),
 	telefono VARCHAR(100),
 	fecha_contratacion DATE
+	id_puesto TINYINT
 );
 
 CREATE TABLE PUESTO_EMPLEADO(
@@ -23,12 +24,13 @@ CREATE TABLE PUESTO_EMPLEADO(
 	puesto VARCHAR(50)
 );
 
-CREATE TABLE DEPARTAMENTO_EMPLEADO(
-	id_departamento_empleado INT PRIMARY KEY IDENTITY
-	id_departamento TINYINT
-	id_empleado SMALLINT,
-	FOREIGN KEY (id_departamento) REFERENCES DEPARTAMENTO(id_departamento),
-	FOREIGN KEY (id_empleado) REFERENCES EMPLEADO(id_empleado)
+--  Intersección Empleado-Departamento
+CREATE TABLE EMPLEADO_DEPARTAMENTO (
+    id_empleado SMALLINT NOT NULL,
+    id_departamento TINYINT NOT NULL,
+    PRIMARY KEY (id_empleado, id_departamento),
+    FOREIGN KEY (id_empleado) REFERENCES EMPLEADO(id_empleado),
+    FOREIGN KEY (id_departamento) REFERENCES DEPARTAMENTO(id_departamento)
 );
 
 CREATE TABLE MANTENIMIENTO(
@@ -37,6 +39,7 @@ CREATE TABLE MANTENIMIENTO(
 	fecha DATE,
 	descripcion VARCHAR(60),
 	costo DECIMAL(5,2)
+	id_empleado SMALLINT
 );
 
 CREATE TABLE CLIENTE(
@@ -64,19 +67,13 @@ CREATE TABLE ESTADO_RESERVA(
     estado_v VARCHAR(40)
 );
 
-CREATE TABLE PAGO (
-    id_pago VARCHAR(10) PRIMARY KEY,
-    monto DECIMAL(8, 2),
-    fecha_pago DATE
-);
-
-CREATE TABLE METODO (
-    id_metodo_pago VARCHAR(10) PRIMARY KEY,
-    metodo_pago VARCHAR(30)
-);
-
-CREATE TABLE SERVICIO_RESERVA(
-    id_servicio_reserva VARCHAR(10) PRIMARY KEY
+-- Intersección Reserva-Servicios Adicionales
+CREATE TABLE SERVICIO_RESERVA (
+    id_reserva VARCHAR(15) NOT NULL,
+    id_servicio_adicional VARCHAR(15) NOT NULL,
+    PRIMARY KEY (id_reserva, id_servicio_adicional),
+    FOREIGN KEY (id_reserva) REFERENCES RESERVA(id_reserva),
+    FOREIGN KEY (id_servicio_adicional) REFERENCES SERVICIOS_ADICIONALES(id_servicio_adicional)
 );
 
 CREATE TABLE SERVICIOS_ADICIONALES(
@@ -86,6 +83,18 @@ CREATE TABLE SERVICIOS_ADICIONALES(
     descripcion VARCHAR(80)
 );
 
+CREATE TABLE PAGO (
+    id_pago VARCHAR(10) PRIMARY KEY,
+    id_reserva VARCHAR(15),	
+    monto DECIMAL(8, 2),
+    fecha_pago DATE,
+    id_metodo_pago VARCHAR(10)	
+);
+
+CREATE TABLE METODO (
+    id_metodo_pago VARCHAR(10) PRIMARY KEY,
+    metodo_pago VARCHAR(30)
+);
 
 -- FOREIGN KEYS:
 ALTER TABLE DEPARTAMENTO ADD FOREIGN KEY(id_empleado) REFERENCES PUESTO_EMPLEADO(id_empleado) ON DELETE CASCADE;
@@ -135,22 +144,4 @@ CREATE TABLE VEHICULOS (
     FOREIGN KEY (id_estado_v) REFERENCES ESTADO_VEHICULO(id_estado_v)
 );
 
-
---  Intersección Empleado-Departamento
-CREATE TABLE EMPLEADO_DEPARTAMENTO (
-    id_empleado SMALLINT NOT NULL,
-    id_departamento TINYINT NOT NULL,
-    PRIMARY KEY (id_empleado, id_departamento),
-    FOREIGN KEY (id_empleado) REFERENCES EMPLEADO(id_empleado),
-    FOREIGN KEY (id_departamento) REFERENCES DEPARTAMENTO(id_departamento)
-);
-
--- Intersección Reserva-Servicios Adicionales
-CREATE TABLE SERVICIO_RESERVA (
-    id_reserva VARCHAR(15) NOT NULL,
-    id_servicio_adicional VARCHAR(15) NOT NULL,
-    PRIMARY KEY (id_reserva, id_servicio_adicional),
-    FOREIGN KEY (id_reserva) REFERENCES RESERVA(id_reserva),
-    FOREIGN KEY (id_servicio_adicional) REFERENCES SERVICIOS_ADICIONALES(id_servicio_adicional)
-);
 
