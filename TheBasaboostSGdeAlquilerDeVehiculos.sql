@@ -90,6 +90,25 @@ CREATE TABLE SERVICIO_RESERVA (
     FOREIGN KEY (id_reserva) REFERENCES RESERVA(id_reserva)
 );
 
+--  Intersección Empleado-Departamento
+CREATE TABLE EMPLEADO_DEPARTAMENTO (
+    id_empleado SMALLINT NOT NULL,
+    id_departamento TINYINT NOT NULL,
+    PRIMARY KEY (id_empleado, id_departamento),
+    FOREIGN KEY (id_empleado) REFERENCES EMPLEADO(id_empleado),
+    FOREIGN KEY (id_departamento) REFERENCES DEPARTAMENTO(id_departamento)
+);
+
+
+-- Intersección Reserva-Servicios Adicionales
+CREATE TABLE SERVICIO_RESERVA (
+    id_reserva VARCHAR(15) NOT NULL,
+    id_servicio_adicional VARCHAR(15) NOT NULL,
+    PRIMARY KEY (id_reserva, id_servicio_adicional),
+    FOREIGN KEY (id_reserva) REFERENCES RESERVA(id_reserva),
+    FOREIGN KEY (id_servicio_adicional) REFERENCES SERVICIOS_ADICIONALES(id_servicio_adicional)
+);
+
 
 
 ALTER TABLE DEPARTAMENTO ADD FOREIGN KEY(id_empleado) REFERENCES PUESTO_EMPLEADO(id_empleado) ON DELETE CASCADE;
