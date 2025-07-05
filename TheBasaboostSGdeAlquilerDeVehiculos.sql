@@ -49,7 +49,7 @@ CREATE TABLE RESERVA(
     fecha_inicio_alquiler DATE,
     fecha_fin_alquiler DATE,
     id_estado_r VARCHAR(12),
-    kilometraje_estimado VARCHAR(30)
+    kilometraje_estimado INT
 );
 
 CREATE TABLE ESTADO_RESERVA(
