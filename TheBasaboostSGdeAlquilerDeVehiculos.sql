@@ -35,11 +35,11 @@ CREATE TABLE EMPLEADO_DEPARTAMENTO (
 
 CREATE TABLE MANTENIMIENTO(
 	id_mantenimiento VARCHAR(15) PRIMARY KEY,
-	matricula varchar(10),
-	fecha DATE,
-	descripcion VARCHAR(60),
-	costo DECIMAL(6,2),
-	id_empleado SMALLINT
+	matricula varchar(10) NOT NULL,
+	fecha DATE NOT NULL,
+	descripcion VARCHAR(60) NOT NULL,
+	costo DECIMAL(6,2) NOT NULL,
+	id_empleado SMALLINT NOT NULL
 );
 
 --Tablas que eliminan el muchos a muchos en la tabla "vehiculos"
@@ -76,27 +76,27 @@ CREATE TABLE VEHICULOS (
 
 CREATE TABLE CLIENTE(
 	id_cliente VARCHAR(15) PRIMARY KEY,
-	nombre VARCHAR(50),
+	nombre VARCHAR(50) NOT NULL,
 	direccion VARCHAR(80),
-	email varchar(40),
-	num_licencia VARCHAR(12),
-	telefono VARCHAR(13),
-	fecha_registro DATE
+	email varchar(40) NOT NULL,
+	num_licencia VARCHAR(12) NOT NULL,
+	telefono VARCHAR(13) NOT NULL,
+	fecha_registro DATE NOT NULL
 );
 
 CREATE TABLE RESERVA(
     	id_reserva VARCHAR(15) PRIMARY KEY,
-    	id_cliente VARCHAR(15),
-    	matricula VARCHAR(10),
-    	fecha_inicio_alquiler DATE,
-    	fecha_fin_alquiler DATE,
-    	id_estado_r VARCHAR(12),
-    	kilometraje_estimado INT
+    	id_cliente VARCHAR(15) NOT NULL,
+    	matricula VARCHAR(10) NOT NULL,
+    	fecha_inicio_alquiler DATE NOT NULL,
+    	fecha_fin_alquiler DATE NOT NULL,
+    	id_estado_r VARCHAR(12) NOT NULL,
+    	kilometraje_estimado INT NOT NULL
 );
 
 CREATE TABLE ESTADO_RESERVA(
     	id_estado_r VARCHAR(12) PRIMARY KEY,
-    	estado_v VARCHAR(40)
+    	estado_v VARCHAR(40) NOT NULL
 );
 
 CREATE TABLE SERVICIO_RESERVA (
@@ -108,22 +108,22 @@ CREATE TABLE SERVICIO_RESERVA (
 -- Intersección Reserva-Servicios Adicionales
 CREATE TABLE SERVICIOS_ADICIONALES(
     	id_servicio_adicional VARCHAR(15) PRIMARY KEY,
-    	nombre VARCHAR(35),
-    	costo DECIMAL(7, 2),
-    	descripcion VARCHAR(80)
+    	nombre VARCHAR(35) NOT NULL,
+    	costo DECIMAL(7, 2) NOT NULL,
+    	descripcion VARCHAR(80) NOT NULL
 );
 
 CREATE TABLE PAGO (
     	id_pago VARCHAR(15) PRIMARY KEY,
-    	id_reserva VARCHAR(15),	
-   	monto DECIMAL(8, 2),
-    	fecha_pago DATE,
-    	id_metodo_pago VARCHAR(10)	
+    	id_reserva VARCHAR(15) NOT NULL,	
+   	monto DECIMAL(8, 2) NOT NULL,
+    	fecha_pago DATE NOT NULL,
+    	id_metodo_pago VARCHAR(10) NOT NULL	
 );
 
 CREATE TABLE METODO_PAGO (
     	id_metodo_pago VARCHAR(10) PRIMARY KEY,
-    	metodo_pago VARCHAR(30)
+    	metodo_pago VARCHAR(30) NOT NULL
 );
 
 -- FOREIGN KEYS:
