@@ -28,6 +28,7 @@ CREATE TABLE PUESTO_EMPLEADO(
 
 CREATE TABLE MANTENIMIENTO(
 	id_mantenimiento VARCHAR(15) PRIMARY KEY,
+	matricula varchar(10)
 	fecha DATE,
 	descripcion VARCHAR(60),
 	costo DECIMAL(5,2)
