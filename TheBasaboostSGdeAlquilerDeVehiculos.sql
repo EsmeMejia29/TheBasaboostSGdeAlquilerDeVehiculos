@@ -36,7 +36,7 @@ CREATE TABLE CLIENTE(
 	id_cliente VARCHAR(15) PRIMARY KEY,
 	nombre VARCHAR(50),
 	direccion VARCHAR(100),
-	correo_electronico varchar(50),
+	email varchar(40),
 	num_licencia VARCHAR(12),
 	telefono VARCHAR(13),
 	fecha_registro DATE
