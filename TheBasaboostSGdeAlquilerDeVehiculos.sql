@@ -700,7 +700,7 @@ EXEC INGRESOS_TIPO_VEHICULO;
 
 --Consulta adicional No 4. Metodo de pago mas y menos utilizado
 
--- Consulta para método de pago más y menos utilizado
+-- Consulta para método de pago más utilizado
 
 -- Métodos de pago más utilizados (en este caso ambos tienen la misma cantidad)
 SELECT MP.metodo_pago, COUNT(*) AS total_uso
