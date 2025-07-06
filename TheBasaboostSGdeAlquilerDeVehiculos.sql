@@ -544,7 +544,7 @@ AS BEGIN
 	ON SR.id_servicio_adicional = SA.id_servicio_adicional
 	INNER JOIN ESTADO_RESERVA ER
 	ON R.id_estado_r = ER.id_estado_r
-	WHERE R.id_reserva = @ID_RESERVA;
+	WHERE R.id_reserva = @ID_RESERVA
 END;
 
 EXEC SERVICIO_ADICIONALES_RESERVA @ID_RESERVA = 'RSV003';
