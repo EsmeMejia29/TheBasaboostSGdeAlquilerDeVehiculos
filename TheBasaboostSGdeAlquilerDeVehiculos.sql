@@ -802,12 +802,10 @@ BEGIN
     FROM EMPLEADO
     WHERE id_empleado = @id_empleado;
 
-    -- Obtener cantidad de mantenimientos realizados
     SELECT @total = COUNT(*)
     FROM MANTENIMIENTO
     WHERE id_empleado = @id_empleado;
 
-    -- Imprimir resultado
     PRINT 'El empleado ' + ISNULL(@nombre, 'desconocido') + 
           ' ha realizado ' + CAST(@total AS VARCHAR) + ' mantenimientos.';
 END;
