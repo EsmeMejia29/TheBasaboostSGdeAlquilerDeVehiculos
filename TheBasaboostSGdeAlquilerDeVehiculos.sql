@@ -530,7 +530,7 @@ EXEC sp_obtener_vehiculos_disponibles;
 SELECT 
     SUM(monto) AS "Pago total"
 FROM PAGO
-WHERE MONTH(fecha_pago) = 7 AND YEAR(fecha_pago) = 2025;
+WHERE MONTH(fecha_pago) = 8 AND YEAR(fecha_pago) = 2024;
 
 --- Procedimiento almacenado
 CREATE PROCEDURE sp_total_pagos_por_mes
@@ -545,7 +545,7 @@ BEGIN
 END;
 
 --- Ejecutable
-EXEC sp_total_pagos_por_mes @mes = 7, @anio = 2025;
+EXEC sp_total_pagos_por_mes @mes = 8, @anio = 2024;
 
 -- 4. Obtener todos los empleados en un departamento específico. Para este ejemplo se eligio a "Atencion al 
 --cliente" pero puede cambiarse a su gusto
