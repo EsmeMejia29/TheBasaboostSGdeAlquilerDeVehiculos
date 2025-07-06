@@ -383,3 +383,136 @@ insert into pago (id_pago, id_reserva, monto, fecha_pago, id_metodo_pago) values
 ('PG004', 'RSV004', 289.00, '2024-07-14', 'tran'),
 ('PG005', 'RSV005', 220.00, '2024-07-18', 'efec');
 
+--Consultas
+---- 1. Obtener todas las reservas de un cliente en específíco
+SELECT 
+    R.id_reserva, 
+    R.fecha_inicio_alquiler, 
+    R.fecha_fin_alquiler, 
+    R.matricula, 
+    ER.estado_r
+FROM RESERVA R
+INNER JOIN ESTADO_RESERVA ER ON R.id_estado_r = ER.id_estado_r
+WHERE R.id_cliente = 'poner id cliente';
+
+--- Procedimiento almacenado
+CREATE PROCEDURE sp_obtener_reservas_cliente
+    @id_cliente VARCHAR(15)
+AS
+BEGIN
+    SELECT 
+        R.id_reserva, 
+        R.fecha_inicio_alquiler, 
+        R.fecha_fin_alquiler, 
+        R.matricula, 
+        ER.estado_r
+    FROM RESERVA R
+    INNER JOIN ESTADO_RESERVA ER ON R.id_estado_r = ER.id_estado_r
+    WHERE R.id_cliente = @id_cliente;
+END;
+
+--- Ejecutable
+EXEC sp_obtener_reservas_cliente @id_cliente = 'poner id cliente';
+
+
+--- 2. Obtener todos los vehiculos disponibles 
+SELECT 
+    V.matricula, 
+    MV.marca, 
+    MODV.modelo, 
+    V.anio, 
+    TV.tipo, 
+    V.precio_diario
+FROM VEHICULOS V
+INNER JOIN MARCA_VEHICULO MV ON V.id_marca = MV.id_marca
+INNER JOIN MODELO_VEHICULO MODV ON V.id_modelo = MODV.id_modelo
+INNER JOIN TIPO_VEHICULO TV ON V.id_tipo = TV.id_tipo
+INNER JOIN ESTADO_VEHICULO EV ON V.id_estado_v = EV.id_estado_v
+WHERE EV.estado_v = 'Disponible';
+
+--- Procedimiento almacenado
+CREATE PROCEDURE sp_obtener_vehiculos_disponibles
+AS
+BEGIN
+    SELECT 
+        V.matricula, 
+        MV.marca, 
+        MODV.modelo, 
+        V.anio, 
+        TV.tipo, 
+        V.precio_diario
+    FROM VEHICULOS V
+    INNER JOIN MARCA_VEHICULO MV ON V.id_marca = MV.id_marca
+    INNER JOIN MODELO_VEHICULO MODV ON V.id_modelo = MODV.id_modelo
+    INNER JOIN TIPO_VEHICULO TV ON V.id_tipo = TV.id_tipo
+    INNER JOIN ESTADO_VEHICULO EV ON V.id_estado_v = EV.id_estado_v
+    WHERE EV.estado_v = 'Disponible';
+END;
+
+--- Ejecutable
+EXEC sp_obtener_vehiculos_disponibles;
+
+---- 3. Obtener el total de pagos recibidos en un mes específico
+SELECT 
+    SUM(monto) AS "Pago total"
+FROM PAGO
+WHERE MONTH(fecha_pago) = 7 AND YEAR(fecha_pago) = 2025;
+
+--- Procedimiento almacenado
+CREATE PROCEDURE sp_total_pagos_por_mes
+    @mes INT,
+    @anio INT
+AS
+BEGIN
+    SELECT 
+        SUM(monto) AS total_pagado
+    FROM PAGO
+    WHERE MONTH(fecha_pago) = @mes AND YEAR(fecha_pago) = @anio;
+END;
+
+--- Ejecutable
+EXEC sp_total_pagos_por_mes @mes = 7, @anio = 2025;
+
+----Consultas extras:
+----1. Vehiculo más alquilado
+SELECT TOP 1 R.matricula, COUNT(*) AS "Veces que se ha alquilado"
+FROM RESERVA R
+GROUP BY R.matricula
+ORDER BY "Veces que se ha alquilado" DESC;
+
+---Procedimiento almacenado
+CREATE PROCEDURE sp_vehiculo_mas_alquilado
+AS
+BEGIN
+    SELECT TOP 1 R.matricula, COUNT(*) AS "Veces que se ha alquilado"
+    FROM RESERVA R
+    GROUP BY R.matricula
+    ORDER BY "Veces que se ha alquilado" DESC;
+END;
+
+-- Ejecutable
+EXEC sp_vehiculo_mas_alquilado;
+
+
+---2. Cliente que más paga
+SELECT TOP 1 C.id_cliente, C.nombre, SUM(P.monto) AS "Pago total"
+FROM CLIENTE C
+JOIN RESERVA R ON C.id_cliente = R.id_cliente
+JOIN PAGO P ON R.id_reserva = P.id_reserva
+GROUP BY C.id_cliente, C.nombre
+ORDER BY "Pago total" DESC;
+
+--- Procedimiento almacenado
+CREATE PROCEDURE sp_cliente_que_mas_paga
+AS
+BEGIN
+    SELECT TOP 1 C.id_cliente, C.nombre, SUM(P.monto) AS "Pago total"
+    FROM CLIENTE C
+    JOIN RESERVA R ON C.id_cliente = R.id_cliente
+    JOIN PAGO P ON R.id_reserva = P.id_reserva
+    GROUP BY C.id_cliente, C.nombre
+    ORDER BY "Pago total" DESC;
+END;
+
+-- Ejecutable
+EXEC sp_cliente_que_mas_paga;
