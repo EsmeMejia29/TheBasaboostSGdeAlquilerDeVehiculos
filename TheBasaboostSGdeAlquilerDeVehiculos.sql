@@ -473,6 +473,7 @@ END;
 --- Ejecutable
 EXEC sp_total_pagos_por_mes @mes = 7, @anio = 2025;
 
+
 -- 4. Obtener todos los empleados en un departamento específico. Para este ejemplo se eligio a "Atencion al 
 --cliente" pero puede cambiarse a su gusto
 SELECT E.id_empleado, E.nombre, E.id_puesto, ED.id_departamento, D.nombre_departamento
@@ -482,6 +483,44 @@ ON E.id_empleado = ED.id_empleado
 INNER JOIN DEPARTAMENTO D
 ON ED.id_departamento = D.id_departamento
 WHERE ED.id_departamento = 2;
+
+-- Ejercicio 4 en forma de procedimiento almacenado pero con el id del departamento
+DROP PROCEDURE IF EXISTS EMPLEADOS_DE_UN_DEPARTAMENTO; --Consulta de ayuda
+
+CREATE PROCEDURE EMPLEADOS_DE_UN_DEPARTAMENTO
+	@DEPARTAMENTO TINYINT
+AS BEGIN
+	SELECT E.id_empleado, E.nombre, E.id_puesto, ED.id_departamento, D.nombre_departamento
+	FROM EMPLEADO E
+	INNER JOIN EMPLEADO_DEPARTAMENTO ED
+	ON E.id_empleado = ED.id_empleado
+	INNER JOIN DEPARTAMENTO D
+	ON ED.id_departamento = D.id_departamento
+	WHERE ED.id_departamento = @DEPARTAMENTO;
+END;
+
+EXEC EMPLEADOS_DE_UN_DEPARTAMENTO @DEPARTAMENTO = 3;
+
+-- Ejercicio 4 en forma de procedimiento almacenado pero con el nombre del departamento. De igual forma, lo puede cambiar por 
+--cualquiera de los departamentos de esta base para probar el procedimiento almacenado y la consulta
+
+DROP PROCEDURE IF EXISTS EMPLEADOS_DE_UN_DEPARTAMENTO_NOMBRE; --Consulta de ayuda
+
+CREATE PROCEDURE EMPLEADOS_DE_UN_DEPARTAMENTO_NOMBRE
+	@DEPARTAMENTO_NOMBRE VARCHAR(35)
+AS BEGIN
+	SELECT E.id_empleado, E.nombre, E.id_puesto, ED.id_departamento, D.nombre_departamento
+	FROM EMPLEADO E
+	INNER JOIN EMPLEADO_DEPARTAMENTO ED
+	ON E.id_empleado = ED.id_empleado
+	INNER JOIN DEPARTAMENTO D
+	ON ED.id_departamento = D.id_departamento
+	WHERE D.nombre_departamento COLLATE Latin1_General_CI_AI = @DEPARTAMENTO_NOMBRE COLLATE Latin1_General_CI_AI --descubri que se puede usar CI y AI para ignorar el case y las tildes
+END;
+
+EXEC EMPLEADOS_DE_UN_DEPARTAMENTO_NOMBRE @DEPARTAMENTO_NOMBRE = 'atencion al cliente';
+
+
 
 
 ----Consultas extras:
