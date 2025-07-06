@@ -473,6 +473,17 @@ END;
 --- Ejecutable
 EXEC sp_total_pagos_por_mes @mes = 7, @anio = 2025;
 
+-- 4. Obtener todos los empleados en un departamento específico. Para este ejemplo se eligio a "Atencion al 
+--cliente" pero puede cambiarse a su gusto
+SELECT E.id_empleado, E.nombre, E.id_puesto, ED.id_departamento, D.nombre_departamento
+FROM EMPLEADO E
+INNER JOIN EMPLEADO_DEPARTAMENTO ED
+ON E.id_empleado = ED.id_empleado
+INNER JOIN DEPARTAMENTO D
+ON ED.id_departamento = D.id_departamento
+WHERE ED.id_departamento = 2;
+
+
 ----Consultas extras:
 ----1. Vehiculo más alquilado
 SELECT TOP 1 R.matricula, COUNT(*) AS "Veces que se ha alquilado"
