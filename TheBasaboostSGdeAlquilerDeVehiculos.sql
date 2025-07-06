@@ -160,7 +160,6 @@ ALTER TABLE SERVICIO_RESERVA ADD FOREIGN KEY (id_servicio_adicional) REFERENCES 
 
 
 --Inserciones
---Inserciones
 INSERT INTO cliente (id_cliente, nombre, direccion, email, num_licencia, telefono, fecha_registro) VALUES
 ('cli001', 'Elena Claramount', 'Residencial Santa Elena, Calle El Pedregal #115, San Salvador', 'eclaramunt@gmail.com', 'E41773130', '7789-4472', '2024-05-02'),
 ('cli002', 'Santiago Saca', 'Residencial Altos de la Escalón, Calle Los Laureles #77, San Salvador', 'ssaca@gmail.com', 'C78537056', '7715-6709', '2024-06-25'),
@@ -393,7 +392,7 @@ SELECT
     ER.estado_r
 FROM RESERVA R
 INNER JOIN ESTADO_RESERVA ER ON R.id_estado_r = ER.id_estado_r
-WHERE R.id_cliente = 'poner id cliente';
+WHERE R.id_cliente = 'cli048';
 
 --- Procedimiento almacenado
 CREATE PROCEDURE sp_obtener_reservas_cliente
@@ -412,7 +411,7 @@ BEGIN
 END;
 
 --- Ejecutable
-EXEC sp_obtener_reservas_cliente @id_cliente = 'poner id cliente';
+EXEC sp_obtener_reservas_cliente @id_cliente = 'cli048';
 
 
 --- 2. Obtener todos los vehiculos disponibles 
@@ -529,7 +528,7 @@ INNER JOIN SERVICIOS_ADICIONALES SA
 ON SR.id_servicio_adicional = SA.id_servicio_adicional
 INNER JOIN ESTADO_RESERVA ER
 ON R.id_estado_r = ER.id_estado_r
-WHERE R.id_reserva = 'RSV001';
+WHERE R.id_reserva = 'RSV003';
 
 -- Procedimiento almacenado del ejercicio 5.
 DROP PROCEDURE IF SERVICIO_ADICIONALES_RESERVA;
@@ -548,7 +547,7 @@ AS BEGIN
 	WHERE R.id_reserva = @ID_RESERVA;
 END;
 
-EXEC SERVICIO_ADICIONALES_RESERVA @ID_RESERVA = 'RSV002';
+EXEC SERVICIO_ADICIONALES_RESERVA @ID_RESERVA = 'RSV003';
 
 ----Consultas extras:
 ----1. Vehiculo más alquilado
