@@ -462,10 +462,10 @@ SELECT
     R.fecha_inicio_alquiler, 
     R.fecha_fin_alquiler, 
     R.matricula, 
-    ER.estado_r
+    ER.id_estado_r
 FROM RESERVA R
 INNER JOIN ESTADO_RESERVA ER ON R.id_estado_r = ER.id_estado_r
-WHERE R.id_cliente = 'cli048';
+WHERE R.id_cliente = 'cli009';
 
 --- Procedimiento almacenado
 CREATE PROCEDURE sp_obtener_reservas_cliente
@@ -477,14 +477,14 @@ BEGIN
         R.fecha_inicio_alquiler, 
         R.fecha_fin_alquiler, 
         R.matricula, 
-        ER.estado_r
+        ER.id_estado_r
     FROM RESERVA R
     INNER JOIN ESTADO_RESERVA ER ON R.id_estado_r = ER.id_estado_r
     WHERE R.id_cliente = @id_cliente;
 END;
 
 --- Ejecutable
-EXEC sp_obtener_reservas_cliente @id_cliente = 'cli048';
+EXEC sp_obtener_reservas_cliente @id_cliente = 'cli009';
 
 
 --- 2. Obtener todos los vehiculos disponibles 
@@ -494,7 +494,8 @@ SELECT
     MODV.modelo, 
     V.anio, 
     TV.tipo, 
-    V.precio_diario
+    V.precio_diario,
+	EV.estado_v
 FROM VEHICULOS V
 INNER JOIN MARCA_VEHICULO MV ON V.id_marca = MV.id_marca
 INNER JOIN MODELO_VEHICULO MODV ON V.id_modelo = MODV.id_modelo
@@ -512,7 +513,8 @@ BEGIN
         MODV.modelo, 
         V.anio, 
         TV.tipo, 
-        V.precio_diario
+        V.precio_diario,
+		EV.estado_v
     FROM VEHICULOS V
     INNER JOIN MARCA_VEHICULO MV ON V.id_marca = MV.id_marca
     INNER JOIN MODELO_VEHICULO MODV ON V.id_modelo = MODV.id_modelo
