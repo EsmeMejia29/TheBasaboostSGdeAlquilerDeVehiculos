@@ -343,11 +343,17 @@ insert into empleado_departamento (id_empleado, id_departamento) values
 
 -- Vehículos (ejemplos; repite hasta llegar a 20)
 insert into vehiculos (matricula, id_marca, id_modelo, anio, id_tipo, precio_diario, id_estado_v, id_empleado) values
-('P123-456', 1, 1, '2021-01-01', 2, 38.00, 1, 1),    -- Kia Soul SUV
-('P234-567', 3, 3, '2020-01-01', 1, 36.00, 1, 2),    -- Toyota Corolla Sedán
-('P345-678', 5, 5, '2022-01-01', 2, 140.00, 1, 3),   -- Porsche Cayenne SUV
-('P456-789', 2, 2, '2021-01-01', 1, 33.50, 1, 4),    -- Hyundai Elantra Sedán
-('P567-890', 4, 4, '2019-01-01', 1, 31.00, 1, 5);   -- Nissan ROGUE
+('P123-456', 1, 1, '2021-01-01', 2, 38.00, 1, 1),    
+('P234-567', 3, 3, '2020-01-01', 1, 36.00, 1, 2),    
+('P345-678', 5, 5, '2022-01-01', 2, 140.00, 1, 3),   
+('P456-789', 2, 2, '2021-01-01', 1, 33.50, 1, 4),    
+('P567-890', 4, 4, '2019-01-01', 1, 31.00, 1, 5),    
+('P678-901', 6, 6, '2021-05-01', 3, 29.0, 1, 6), -
+('P789-012', 7, 7, '2022-03-01', 2, 42.5, 1, 7),
+('P890-123', 8, 8, '2023-01-01', 2, 44.0, 1, 8),
+('P901-234', 9, 9, '2021-11-01', 3, 28.5, 1, 9),
+('P012-345', 10, 10, '2020-09-01', 2, 39.0, 1, 10),
+('P147-258', 3, 13, '2023-02-01', 2, 41.0, 1, 11);
 
 -- Mantenimientos 
 insert into mantenimiento (id_mantenimiento, matricula, fecha, descripcion, costo, id_empleado) values
