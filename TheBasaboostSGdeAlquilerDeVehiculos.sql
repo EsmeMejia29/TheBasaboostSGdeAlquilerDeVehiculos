@@ -856,3 +856,103 @@ BEGIN
 END;
 
 EXEC CANTIDAD_MANTENIMIENTOS_EMPLEADOS;
+
+-- Triggers
+
+-- Se crea una tabla "Reserva"
+
+CREATE TABLE CONTROL_RESERVA (
+    id_control INT PRIMARY KEY IDENTITY,
+    id_reserva VARCHAR(15),
+    matricula VARCHAR(10),
+    fecha_hora_reserva DATETIME DEFAULT GETDATE()
+);
+
+-- Trigger despues de hacer un insert
+
+CREATE TRIGGER tr_actualizar_estado_vehiculo_y_control
+ON RESERVA
+AFTER INSERT
+AS
+BEGIN
+    -- Cambiar estado del vehículo a 'Alquilado' (id_estado_v = 2)
+    UPDATE VEHICULOS
+    SET id_estado_v = 2
+    WHERE matricula IN (
+        SELECT matricula FROM inserted
+    );
+
+    -- Insertar en tabla de control con fecha y hora actual
+    INSERT INTO CONTROL_RESERVA (id_reserva, matricula)
+    SELECT id_reserva, matricula
+    FROM inserted;
+
+END;
+
+-- Trigger para Registrar Pago Automático
+
+CREATE TRIGGER tr_pago_automatico_reserva
+ON RESERVA
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Insertar automáticamente un pago con monto 0 para cada nueva reserva
+    INSERT INTO PAGO (id_pago, id_reserva, monto, fecha_pago, id_metodo_pago)
+    SELECT 
+        CONCAT('PG_', id_reserva),   -- ID de pago generado como 'PG' + (id_reserva)
+        id_reserva,
+        0.00,
+        GETDATE(),
+        'efec'  -- Método de pago por defecto
+    FROM inserted;
+END;
+
+-- Vistas
+
+-- Crear vista para obtener todas las reservas que se marcan como "Alquiladas"
+
+CREATE VIEW vista_reservas_actuales AS
+SELECT 
+    R.id_reserva,
+    C.id_cliente,
+    C.nombre AS nombre_cliente,
+    C.telefono,
+    V.matricula,
+    MV.marca,
+    MODV.modelo,
+    V.anio,
+    R.fecha_inicio_alquiler,
+    R.fecha_fin_alquiler
+FROM RESERVA R
+JOIN CLIENTE C ON R.id_cliente = C.id_cliente
+JOIN VEHICULOS V ON R.matricula = V.matricula
+JOIN ESTADO_VEHICULO EV ON V.id_estado_v = EV.id_estado_v
+JOIN MARCA_VEHICULO MV ON V.id_marca = MV.id_marca
+JOIN MODELO_VEHICULO MODV ON V.id_modelo = MODV.id_modelo
+WHERE 
+    GETDATE() BETWEEN R.fecha_inicio_alquiler AND R.fecha_fin_alquiler
+    AND EV.estado_v = 'Alquilado';
+
+-- Ejecucion de la vista
+
+SELECT * FROM vista_reservas_actuales;
+
+-- Vista de Ingresos Mensuales
+
+CREATE VIEW vista_ingresos_mensuales AS
+SELECT 
+    YEAR(fecha_pago) AS anio,
+    MONTH(fecha_pago) AS mes,
+    SUM(monto) AS ingresos_totales
+FROM PAGO
+GROUP BY 
+    YEAR(fecha_pago),
+    MONTH(fecha_pago);
+
+
+-- Ejecutamos la vista
+
+SELECT * FROM vista_ingresos_mensuales
+ORDER BY anio, mes;
