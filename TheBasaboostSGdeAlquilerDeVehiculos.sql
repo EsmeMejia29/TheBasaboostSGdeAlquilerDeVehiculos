@@ -695,3 +695,121 @@ AS BEGIN
 END;
 
 EXEC INGRESOS_TIPO_VEHICULO;
+
+EXEC INGRESOS_TIPO_VEHICULO;
+
+--Consulta adicional No 4. Metodo de pago mas y menos utilizado
+
+-- Consulta para método de pago más y menos utilizado
+
+-- Métodos de pago más utilizados (en este caso ambos tienen la misma cantidad)
+SELECT MP.metodo_pago, COUNT(*) AS total_uso
+FROM PAGO P
+INNER JOIN METODO_PAGO MP ON P.id_metodo_pago = MP.id_metodo_pago
+GROUP BY MP.metodo_pago
+HAVING COUNT(*) = (
+    SELECT MAX(cantidad)
+    FROM (
+        SELECT COUNT(*) AS cantidad
+        FROM PAGO
+        GROUP BY id_metodo_pago
+    ) AS sub
+);
+
+--Procedimiento almacenado de la Consulta adicional No. 4
+CREATE PROCEDURE METODO_MAS_USADO
+AS BEGIN
+	SELECT MP.metodo_pago, COUNT(*) AS total_uso
+	FROM PAGO P
+	JOIN METODO_PAGO MP ON P.id_metodo_pago = MP.id_metodo_pago
+	GROUP BY MP.metodo_pago
+	HAVING COUNT(*) = (
+		SELECT MAX(cantidad)
+		FROM (
+			SELECT COUNT(*) AS cantidad
+			FROM PAGO
+			GROUP BY id_metodo_pago
+		) AS sub
+	)
+END;
+
+EXEC METODO_MAS_USADO;
+
+--Consulta adicional No 5. Cantidad de mantenimientos que cada Empleado ha hecho.
+SELECT 
+    E.id_empleado,
+    E.nombre,
+    (SELECT COUNT(*) 
+     FROM MANTENIMIENTO M
+     WHERE M.id_empleado = E.id_empleado) AS total_mantenimientos
+FROM EMPLEADO E;
+
+--Procedimiento almacenado de la consulta adicional No.5 pero por id del empleado
+
+CREATE PROCEDURE CANTIDAD_MANTENIMIENTOS_EMPLEADO_ID
+    @id_empleado SMALLINT
+AS
+BEGIN
+    DECLARE @nombre VARCHAR(50);
+    DECLARE @total INT;
+
+    SELECT @nombre = nombre
+    FROM EMPLEADO
+    WHERE id_empleado = @id_empleado;
+
+    -- Obtener cantidad de mantenimientos realizados
+    SELECT @total = COUNT(*)
+    FROM MANTENIMIENTO
+    WHERE id_empleado = @id_empleado;
+
+    -- Imprimir resultado
+    PRINT 'El empleado ' + ISNULL(@nombre, 'desconocido') + 
+          ' ha realizado ' + CAST(@total AS VARCHAR) + ' mantenimientos.';
+END;
+
+EXEC CANTIDAD_MANTENIMIENTOS_EMPLEADO_ID @id_empleado = 3;
+
+select * from EMPLEADO;
+
+--Procedimiento almacenado de la consulta adicional No.5 pero por nombre del empleado
+CREATE PROCEDURE CANTIDAD_MANTENIMIENTOS_EMPLEADO_NOMBRE
+    @nombre_empleado VARCHAR(50)
+AS
+BEGIN
+    DECLARE @id_empleado SMALLINT;
+    DECLARE @total INT;
+
+    SELECT TOP 1 @id_empleado = id_empleado
+    FROM EMPLEADO
+    WHERE nombre = @nombre_empleado;
+
+    IF @id_empleado IS NULL
+    BEGIN
+        PRINT 'Empleado no encontrado.';
+        RETURN;
+    END
+
+    SELECT @total = COUNT(*)
+    FROM MANTENIMIENTO
+    WHERE id_empleado = @id_empleado;
+
+    PRINT 'El empleado ' + @nombre_empleado + 
+          ' ha realizado ' + CAST(@total AS VARCHAR) + ' mantenimientos.';
+END;
+
+EXEC CANTIDAD_MANTENIMIENTOS_EMPLEADO_NOMBRE @nombre_empleado = 'Andrea Claramunt';
+
+-- Mismo procedimiento almacenado pero con todos los empleados
+CREATE PROCEDURE CANTIDAD_MANTENIMIENTOS_EMPLEADOS
+AS
+BEGIN
+	SELECT 
+    E.id_empleado,
+    E.nombre,
+    (SELECT COUNT(*) 
+     FROM MANTENIMIENTO M
+     WHERE M.id_empleado = E.id_empleado) AS total_mantenimientos
+	FROM EMPLEADO E;
+END;
+
+EXEC CANTIDAD_MANTENIMIENTOS_EMPLEADOS;
