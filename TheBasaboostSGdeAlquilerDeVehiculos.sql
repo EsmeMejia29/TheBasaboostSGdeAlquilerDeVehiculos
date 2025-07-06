@@ -528,7 +528,7 @@ INNER JOIN SERVICIOS_ADICIONALES SA
 ON SR.id_servicio_adicional = SA.id_servicio_adicional
 INNER JOIN ESTADO_RESERVA ER
 ON R.id_estado_r = ER.id_estado_r
-WHERE R.id_reserva = 'RSV003';
+WHERE R.id_reserva = 'RSV001';
 
 -- Procedimiento almacenado del ejercicio 5.
 DROP PROCEDURE IF SERVICIO_ADICIONALES_RESERVA;
@@ -547,7 +547,8 @@ AS BEGIN
 	WHERE R.id_reserva = @ID_RESERVA
 END;
 
-EXEC SERVICIO_ADICIONALES_RESERVA @ID_RESERVA = 'RSV003';
+EXEC SERVICIO_ADICIONALES_RESERVA @ID_RESERVA = 'RSV002';
+
 
 ----Consultas extras:
 ----1. Vehiculo más alquilado
@@ -592,3 +593,77 @@ END;
 
 -- Ejecutable
 EXEC sp_cliente_que_mas_paga;
+
+-- Consultas adicional extra No. 3. ingresos por tipo de vehículo.
+SELECT tipo, 
+       COALESCE(
+         (SELECT SUM(P.monto)
+          FROM VEHICULOS V
+          JOIN RESERVA R ON V.matricula = R.matricula
+          JOIN PAGO P ON R.id_reserva = P.id_reserva
+          WHERE V.id_tipo = TV.id_tipo
+            AND P.monto > 0), 0) AS "Ingresos por tipo de vehiculo"
+FROM TIPO_VEHICULO TV;
+
+select * from pago;
+select * from reserva;
+select * from VEHICULOS;
+select * from TIPO_VEHICULO;
+
+-- Procedimiento almacenado de la consulta adicion No. 3 Pero para un tipo de vehiculo especifico mediante id
+
+DROP PROCEDURE IF EXISTS INGRESO_TIPO_VEHICULO_ID;
+
+CREATE PROCEDURE INGRESO_TIPO_VEHICULO_ID
+@TIPO_VEHICULO SMALLINT 
+AS BEGIN
+	SELECT tipo, 
+       COALESCE(
+         (SELECT SUM(P.monto)
+          FROM VEHICULOS V
+          JOIN RESERVA R ON V.matricula = R.matricula
+          JOIN PAGO P ON R.id_reserva = P.id_reserva
+          WHERE V.id_tipo = TV.id_tipo
+            AND P.monto > 0), 0) AS "Ingresos por tipo de vehiculo"
+	FROM TIPO_VEHICULO TV
+	WHERE TV.id_tipo = @TIPO_VEHICULO
+END;
+
+EXEC INGRESO_TIPO_VEHICULO_ID @TIPO_VEHICULO = 1;
+
+
+-- Procedimiento almacenado de la consulta adicion No. 3 Pero para un tipo de vehiculo especifico mediante nombre
+
+DROP PROCEDURE IF EXISTS INGRESO_TIPO_VEHICULO_NOMBRE;
+CREATE PROCEDURE INGRESO_TIPO_VEHICULO_NOMBRE
+@TIPO_VEHICULO_NOMBRE VARCHAR(30) 
+AS BEGIN
+	SELECT tipo, 
+       COALESCE(
+         (SELECT SUM(P.monto)
+          FROM VEHICULOS V
+          JOIN RESERVA R ON V.matricula = R.matricula
+          JOIN PAGO P ON R.id_reserva = P.id_reserva
+          WHERE V.id_tipo = TV.id_tipo
+            AND P.monto > 0), 0) AS "Ingresos por tipo de vehiculo"
+	FROM TIPO_VEHICULO TV
+	WHERE TV.tipo = @TIPO_VEHICULO_NOMBRE
+END;
+
+EXEC INGRESO_TIPO_VEHICULO_NOMBRE @TIPO_VEHICULO_NOMBRE = 'SUV';
+
+--Mismo procedimiento almacenado pero sin parametros
+CREATE PROCEDURE INGRESOS_TIPO_VEHICULO
+AS BEGIN
+	SELECT tipo, 
+       COALESCE(
+         (SELECT SUM(P.monto)
+          FROM VEHICULOS V
+          JOIN RESERVA R ON V.matricula = R.matricula
+          JOIN PAGO P ON R.id_reserva = P.id_reserva
+          WHERE V.id_tipo = TV.id_tipo
+            AND P.monto > 0), 0) AS "Ingresos por tipo de vehiculo"
+	FROM TIPO_VEHICULO TV
+END;
+
+EXEC INGRESOS_TIPO_VEHICULO;
