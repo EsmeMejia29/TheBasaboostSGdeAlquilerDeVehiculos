@@ -626,8 +626,8 @@ EXEC SERVICIO_ADICIONALES_RESERVA @ID_RESERVA = 'RSV002';
 
 
 ----Consultas extras:
-----1. Vehiculo más alquilado
-SELECT TOP 1 R.matricula, COUNT(*) AS "Veces que se ha alquilado"
+----1. Vehiculo más alquilado (en este caso se hace top 5, porque hay 5 vehiculos que tienen la misma cantidad de veces alquiladas)
+SELECT TOP 5 R.matricula, COUNT(*) AS "Veces que se ha alquilado"
 FROM RESERVA R
 GROUP BY R.matricula
 ORDER BY "Veces que se ha alquilado" DESC;
@@ -636,7 +636,7 @@ ORDER BY "Veces que se ha alquilado" DESC;
 CREATE PROCEDURE sp_vehiculo_mas_alquilado
 AS
 BEGIN
-    SELECT TOP 1 R.matricula, COUNT(*) AS "Veces que se ha alquilado"
+    SELECT TOP 5 R.matricula, COUNT(*) AS "Veces que se ha alquilado"
     FROM RESERVA R
     GROUP BY R.matricula
     ORDER BY "Veces que se ha alquilado" DESC;
