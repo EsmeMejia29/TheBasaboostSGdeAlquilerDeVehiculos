@@ -473,10 +473,9 @@ END;
 --- Ejecutable
 EXEC sp_total_pagos_por_mes @mes = 7, @anio = 2025;
 
-
 -- 4. Obtener todos los empleados en un departamento específico. Para este ejemplo se eligio a "Atencion al 
 --cliente" pero puede cambiarse a su gusto
-SELECT E.id_empleado, E.nombre, E.id_puesto, ED.id_departamento, D.nombre_departamento
+SELECT E.id_empleado, E.nombre, E.fecha_contratacion, E.id_puesto, ED.id_departamento, D.nombre_departamento
 FROM EMPLEADO E
 INNER JOIN EMPLEADO_DEPARTAMENTO ED
 ON E.id_empleado = ED.id_empleado
@@ -490,13 +489,13 @@ DROP PROCEDURE IF EXISTS EMPLEADOS_DE_UN_DEPARTAMENTO; --Consulta de ayuda
 CREATE PROCEDURE EMPLEADOS_DE_UN_DEPARTAMENTO
 	@DEPARTAMENTO TINYINT
 AS BEGIN
-	SELECT E.id_empleado, E.nombre, E.id_puesto, ED.id_departamento, D.nombre_departamento
+	SELECT E.id_empleado, E.nombre, E.fecha_contratacion, E.id_puesto, ED.id_departamento, D.nombre_departamento
 	FROM EMPLEADO E
 	INNER JOIN EMPLEADO_DEPARTAMENTO ED
 	ON E.id_empleado = ED.id_empleado
 	INNER JOIN DEPARTAMENTO D
 	ON ED.id_departamento = D.id_departamento
-	WHERE ED.id_departamento = @DEPARTAMENTO;
+	WHERE ED.id_departamento = @DEPARTAMENTO
 END;
 
 EXEC EMPLEADOS_DE_UN_DEPARTAMENTO @DEPARTAMENTO = 3;
@@ -509,7 +508,7 @@ DROP PROCEDURE IF EXISTS EMPLEADOS_DE_UN_DEPARTAMENTO_NOMBRE; --Consulta de ayud
 CREATE PROCEDURE EMPLEADOS_DE_UN_DEPARTAMENTO_NOMBRE
 	@DEPARTAMENTO_NOMBRE VARCHAR(35)
 AS BEGIN
-	SELECT E.id_empleado, E.nombre, E.id_puesto, ED.id_departamento, D.nombre_departamento
+	SELECT E.id_empleado, E.nombre, E.fecha_contratacion, E.id_puesto, ED.id_departamento, D.nombre_departamento
 	FROM EMPLEADO E
 	INNER JOIN EMPLEADO_DEPARTAMENTO ED
 	ON E.id_empleado = ED.id_empleado
@@ -520,8 +519,36 @@ END;
 
 EXEC EMPLEADOS_DE_UN_DEPARTAMENTO_NOMBRE @DEPARTAMENTO_NOMBRE = 'atencion al cliente';
 
+--5. Obtener todos los servicios adicionales usados en una reserva específica. 
 
+SELECT R.id_reserva, R.id_cliente, R.matricula, R.fecha_fin_alquiler, R.fecha_fin_alquiler, ER.estado_v, SA.nombre AS 'nombre del Servicio Adicional', SA.descripcion, SA.costo
+FROM SERVICIO_RESERVA SR
+INNER JOIN RESERVA R
+ON SR.id_reserva = R.id_reserva
+INNER JOIN SERVICIOS_ADICIONALES SA
+ON SR.id_servicio_adicional = SA.id_servicio_adicional
+INNER JOIN ESTADO_RESERVA ER
+ON R.id_estado_r = ER.id_estado_r
+WHERE R.id_reserva = 'RSV001';
 
+-- Procedimiento almacenado del ejercicio 5.
+DROP PROCEDURE IF SERVICIO_ADICIONALES_RESERVA;
+
+CREATE PROCEDURE SERVICIO_ADICIONALES_RESERVA
+@ID_RESERVA VARCHAR(15)
+AS BEGIN
+	SELECT R.id_reserva, R.id_cliente, R.matricula, R.fecha_fin_alquiler, R.fecha_fin_alquiler, ER.estado_v, SA.nombre AS 'nombre del Servicio Adicional', SA.descripcion, SA.costo
+	FROM SERVICIO_RESERVA SR
+	INNER JOIN RESERVA R
+	ON SR.id_reserva = R.id_reserva
+	INNER JOIN SERVICIOS_ADICIONALES SA
+	ON SR.id_servicio_adicional = SA.id_servicio_adicional
+	INNER JOIN ESTADO_RESERVA ER
+	ON R.id_estado_r = ER.id_estado_r
+	WHERE R.id_reserva = @ID_RESERVA;
+END;
+
+EXEC SERVICIO_ADICIONALES_RESERVA @ID_RESERVA = 'RSV002';
 
 ----Consultas extras:
 ----1. Vehiculo más alquilado
