@@ -743,8 +743,6 @@ END;
 
 EXEC INGRESOS_TIPO_VEHICULO;
 
-EXEC INGRESOS_TIPO_VEHICULO;
-
 --Consulta adicional No 4. Metodo de pago mas y menos utilizado
 
 -- Consulta para método de pago más utilizado
