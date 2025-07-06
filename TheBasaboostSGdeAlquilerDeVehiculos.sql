@@ -42,6 +42,17 @@ CREATE TABLE MANTENIMIENTO(
 	id_empleado SMALLINT NOT NULL
 );
 
+CREATE TABLE VEHICULOS(
+    	matricula VARCHAR(10) PRIMARY KEY,
+    	id_marca SMALLINT NOT NULL,
+    	id_modelo SMALLINT NOT NULL,
+    	anio DATE NOT NULL,
+    	id_tipo SMALLINT NOT NULL,
+    	precio_diario DECIMAL(8,2) NOT NULL,
+    	id_estado_v SMALLINT NOT NULL,
+    	id_empleado SMALLINT NOT NULL
+);
+
 --Tablas que eliminan el muchos a muchos en la tabla "vehiculos"
 CREATE TABLE MODELO_VEHICULO (
     	id_modelo SMALLINT PRIMARY KEY,
@@ -61,17 +72,6 @@ CREATE TABLE TIPO_VEHICULO (
 CREATE TABLE ESTADO_VEHICULO (
     	id_estado_v SMALLINT PRIMARY KEY,
     	estado_v VARCHAR(30) NOT NULL
-);
-
-CREATE TABLE VEHICULOS (
-    	matricula VARCHAR(10) PRIMARY KEY,
-    	id_marca SMALLINT NOT NULL,
-    	id_modelo SMALLINT NOT NULL,
-    	anio DATE NOT NULL,
-    	id_tipo SMALLINT NOT NULL,
-    	precio_diario DECIMAL(8,2) NOT NULL,
-    	id_estado_v SMALLINT NOT NULL,
-    	id_empleado SMALLINT NOT NULL
 );
 
 CREATE TABLE CLIENTE(
@@ -99,13 +99,12 @@ CREATE TABLE ESTADO_RESERVA(
     	estado_v VARCHAR(40) NOT NULL
 );
 
-CREATE TABLE SERVICIO_RESERVA (
+CREATE TABLE SERVICIO_RESERVA(
     	id_reserva VARCHAR(15) NOT NULL,
     	id_servicio_adicional VARCHAR(15) NOT NULL,
     	PRIMARY KEY (id_reserva, id_servicio_adicional)
 );
 
--- Intersección Reserva-Servicios Adicionales
 CREATE TABLE SERVICIOS_ADICIONALES(
     	id_servicio_adicional VARCHAR(15) PRIMARY KEY,
     	nombre VARCHAR(35) NOT NULL,
@@ -160,6 +159,7 @@ ALTER TABLE SERVICIO_RESERVA ADD FOREIGN KEY (id_servicio_adicional) REFERENCES 
 
 
 --Inserciones
+-- Clientes:
 INSERT INTO cliente (id_cliente, nombre, direccion, email, num_licencia, telefono, fecha_registro) VALUES
 ('cli001', 'Elena Claramount', 'Residencial Santa Elena, Calle El Pedregal #115, San Salvador', 'eclaramunt@gmail.com', 'E41773130', '7789-4472', '2024-05-02'),
 ('cli002', 'Santiago Saca', 'Residencial Altos de la Escalón, Calle Los Laureles #77, San Salvador', 'ssaca@gmail.com', 'C78537056', '7715-6709', '2024-06-25'),
@@ -212,7 +212,7 @@ INSERT INTO cliente (id_cliente, nombre, direccion, email, num_licencia, telefon
 ('cli049', 'Andrea Safie', 'Residencial La Montaña, Avenida La Montaña #31, Santa Tecla, La Libertad', 'asafie@gmail.com', 'D82850564', '7736-1899', '2024-06-25'),
 ('cli050', 'Carolina Sifontes', 'Residencial Palmira, Calle Palmira #85, San Salvador', 'csifontes@gmail.com', 'D38859166', '7715-9780', '2024-08-14');
 
--- Departamentos
+-- Departamentos:
 insert into departamento (nombre_departamento) values
 ('Mecánica'),
 ('Atención al Cliente'),
@@ -225,7 +225,7 @@ insert into departamento (nombre_departamento) values
 ('Marketing'),
 ('Recursos humanos');
 
--- Puestos de empleado
+-- Puestos de empleados:
 insert into puesto_empleado (puesto) values
 ('Agente de alquiler'),
 ('Mecánico'),
@@ -241,7 +241,7 @@ insert into puesto_empleado (puesto) values
 ('Contador'),
 ('Supervisor de flota');
 
--- Marcas de vehículos
+-- Marcas de vehículos:
 insert into marca_vehiculo (id_marca, marca) values
 (1, 'Kia'),
 (2, 'Hyundai'),
@@ -254,7 +254,7 @@ insert into marca_vehiculo (id_marca, marca) values
 (9, 'Suzuki'),
 (10, 'Ford');
 
--- Modelos de vehículos
+-- Modelos de vehículos:
 insert into modelo_vehiculo (id_modelo, modelo) values
 (1, 'Soul'),
 (2, 'Elantra'),
@@ -277,7 +277,7 @@ insert into modelo_vehiculo (id_modelo, modelo) values
 (19, 'Vitara'),
 (20, 'Escape');
 
--- Tipos de vehículo
+-- Tipos de vehículo:
 insert into tipo_vehiculo (id_tipo, tipo) values
 (1, 'Sedán'),
 (2, 'SUV'),
@@ -290,26 +290,26 @@ insert into tipo_vehiculo (id_tipo, tipo) values
 (9, 'Camión'),
 (10, 'SUV XL, tipo Suburban');
 
--- Estados de vehículo
+-- Estados de vehículo:
 insert into estado_vehiculo (id_estado_v, estado_v) values
 (1, 'Disponible'),
 (2, 'Alquilado'),
 (3, 'En mantenimiento');
 
--- Estados de reserva
+-- Estados de reserva:
 insert into estado_reserva (id_estado_r, estado_v) values
 ('conf', 'Confirmada'),
 ('canc', 'Cancelada'),
 ('comp', 'Completada');
 
--- Métodos de pago
+-- Métodos de pago:
 insert into metodo_pago (id_metodo_pago, metodo_pago) values
 ('efec', 'Efectivo'),
 ('tarj', 'Tarjeta'),
 ('Cheq', 'Cheque´'),
 ('tran', 'Transferencia');
 
--- Servicios adicionales
+-- Servicios adicionales:
 insert into servicios_adicionales (id_servicio_adicional, nombre, costo, descripcion) values
 ('gps', 'GPS', 6.00, 'Sistema de navegación por satélite'),
 ('seguro', 'Seguro Extra', 10.00, 'Cobertura total contra accidentes'),
@@ -322,7 +322,7 @@ insert into servicios_adicionales (id_servicio_adicional, nombre, costo, descrip
 ('conductor', 'Conductor Adicional', 11.00, 'Permite un conductor adicional'),
 ('llantas', 'Protección de Llantas', 4.50, 'Cobertura por daño a llantas');
 
--- Empleados
+-- Empleados:
 insert into empleado (nombre, direccion, email, telefono, fecha_contratacion, id_puesto) values
 ('Roberto Safie Safie', 'Avenida Jerusalén #324, Colonia Escalón, San Salvador', 'rsafie@basaboost.com', '7842-1101', '2023-01-10', 1),
 ('Claudia Steiner Morán', 'Calle La Mascota #88, Colonia San Benito, San Salvador', 'csteiner@basaboost.com', '7820-2012', '2022-03-12', 2),
@@ -335,13 +335,12 @@ insert into empleado (nombre, direccion, email, telefono, fecha_contratacion, id
 ('César Meléndez', 'Colonia Miramonte, 21 Avenida Norte #122, San Salvador', 'cmelendez@basaboost.com', '7702-5421', '2022-11-29', 9),
 ('Paola Ramírez', 'Residencial Villas de Oriente, Calle Los Claveles #9, San Miguel', 'pramirez@basaboost.com', '7904-1876', '2023-06-06', 10);
 
-
--- Relación empleado-departamento
+-- Relación empleado-departamento:
 insert into empleado_departamento (id_empleado, id_departamento) values
 (1, 1), (1, 4), (2, 1), (3, 2), (4, 3), (5, 1), (6, 2), (7, 4), (8, 5), (9, 6),
 (2, 3), (4, 2), (5, 7), (6, 8), (7, 9), (8, 10), (10, 1);
 
--- Vehículos
+-- Vehículos:
 INSERT INTO vehiculos (matricula, id_marca, id_modelo, anio, id_tipo, precio_diario, id_estado_v, id_empleado) VALUES
 ('P378-814', 3, 13, '2019-07-31', 3, 36.15, 1, 9),
 ('P953-899', 6, 16, '2022-01-13', 4, 61.53, 1, 1),
@@ -379,7 +378,7 @@ INSERT INTO vehiculos (matricula, id_marca, id_modelo, anio, id_tipo, precio_dia
 ('P416-140', 1, 11, '2019-07-31', 4, 82.6, 1, 7),
 ('P526-876', 8, 18, '2019-11-13', 5, 100.54, 1, 3);
 
--- Mantenimientos 
+-- Mantenimientos:
 INSERT INTO MANTENIMIENTO (id_mantenimiento, matricula, fecha, descripcion, costo, id_empleado) VALUES
 ('MT001', 'P378-814', '2024-05-20', 'Cambio de aceite y filtro', 45.00, 2),
 ('MT002', 'P953-899', '2024-04-15', 'Cambio de llantas', 120.00, 5),
@@ -392,8 +391,7 @@ INSERT INTO MANTENIMIENTO (id_mantenimiento, matricula, fecha, descripcion, cost
 ('MT009', 'P314-100', '2024-04-19', 'Limpieza de motor', 50.00, 1),
 ('MT010', 'P956-630', '2024-03-10', 'Ajuste de suspensión', 95.00, 7);
 
--- Reservas 
-
+-- Reservas:
 INSERT INTO reserva (id_reserva, id_cliente, matricula, fecha_inicio_alquiler, fecha_fin_alquiler, id_estado_r, kilometraje_estimado) VALUES
 ('RSV001', 'cli006', 'P378-814', '2024-08-01', '2024-08-07', 'conf', 735),
 ('RSV002', 'cli007', 'P953-899', '2024-08-03', '2024-08-09', 'canc', 543),
@@ -422,8 +420,7 @@ INSERT INTO reserva (id_reserva, id_cliente, matricula, fecha_inicio_alquiler, f
 ('RSV025', 'cli011', 'P248-106', '2024-10-11', '2024-10-17', 'comp', 600),
 ('RSV026', 'cli013', 'P582-623', '2024-10-25', '2024-10-31', 'comp', 670);
 
-
--- Servicios adicionales por reserva 
+-- Servicios adicionales por reserva:
 insert into servicio_reserva (id_reserva, id_servicio_adicional) values
 ('RSV001', 'gps'), ('RSV001', 'seguro'), ('RSV001', 'wifi'),
 ('RSV002', 'seguro'), ('RSV002', 'bebe'),
@@ -431,7 +428,7 @@ insert into servicio_reserva (id_reserva, id_servicio_adicional) values
 ('RSV004', 'conductor'), ('RSV004', 'gps'),
 ('RSV005', 'llantas');
 
--- Pagos 
+-- Pagos: 
 INSERT INTO pago (id_pago, id_reserva, monto, fecha_pago, id_metodo_pago) VALUES
 ('PG006', 'RSV006', 305.17, '2024-08-10', 'tarj'),
 ('PG007', 'RSV007', 229.35, '2024-08-13', 'tarj'),
@@ -455,7 +452,7 @@ INSERT INTO pago (id_pago, id_reserva, monto, fecha_pago, id_metodo_pago) VALUES
 ('PG025', 'RSV025', 353.55, '2024-10-06', 'tran'),
 ('PG026', 'RSV026', 478.38, '2024-10-09', 'tarj');
 
---Consultas
+----- CONSULTAS -----
 ---- 1. Obtener todas las reservas de un cliente en específíco
 SELECT 
     R.id_reserva, 
@@ -576,7 +573,6 @@ EXEC EMPLEADOS_DE_UN_DEPARTAMENTO @DEPARTAMENTO = 3;
 
 -- Ejercicio 4 en forma de procedimiento almacenado pero con el nombre del departamento. De igual forma, lo puede cambiar por 
 --cualquiera de los departamentos de esta base para probar el procedimiento almacenado y la consulta
-
 DROP PROCEDURE IF EXISTS EMPLEADOS_DE_UN_DEPARTAMENTO_NOMBRE; --Consulta de ayuda
 
 CREATE PROCEDURE EMPLEADOS_DE_UN_DEPARTAMENTO_NOMBRE
@@ -594,7 +590,6 @@ END;
 EXEC EMPLEADOS_DE_UN_DEPARTAMENTO_NOMBRE @DEPARTAMENTO_NOMBRE = 'atencion al cliente';
 
 --5. Obtener todos los servicios adicionales usados en una reserva específica. 
-
 SELECT R.id_reserva, R.id_cliente, R.matricula, R.fecha_fin_alquiler, R.fecha_fin_alquiler, ER.estado_v, SA.nombre AS 'nombre del Servicio Adicional', SA.descripcion, SA.costo
 FROM SERVICIO_RESERVA SR
 INNER JOIN RESERVA R
@@ -624,8 +619,7 @@ END;
 
 EXEC SERVICIO_ADICIONALES_RESERVA @ID_RESERVA = 'RSV002';
 
-
-----Consultas extras:
+----- CONSULTAS EXTRA: -----
 ----1. Vehiculo más alquilado (en este caso se hace top 5, porque hay 5 vehiculos que tienen la misma cantidad de veces alquiladas)
 SELECT TOP 5 R.matricula, COUNT(*) AS "Veces que se ha alquilado"
 FROM RESERVA R
@@ -644,7 +638,6 @@ END;
 
 -- Ejecutable
 EXEC sp_vehiculo_mas_alquilado;
-
 
 ---2. Cliente que más paga
 SELECT TOP 1 C.id_cliente, C.nombre, SUM(P.monto) AS "Pago total"
@@ -686,7 +679,6 @@ select * from VEHICULOS;
 select * from TIPO_VEHICULO;
 
 -- Procedimiento almacenado de la consulta adicion No. 3 Pero para un tipo de vehiculo especifico mediante id
-
 DROP PROCEDURE IF EXISTS INGRESO_TIPO_VEHICULO_ID;
 
 CREATE PROCEDURE INGRESO_TIPO_VEHICULO_ID
@@ -708,7 +700,6 @@ EXEC INGRESO_TIPO_VEHICULO_ID @TIPO_VEHICULO = 1;
 
 
 -- Procedimiento almacenado de la consulta adicion No. 3 Pero para un tipo de vehiculo especifico mediante nombre
-
 DROP PROCEDURE IF EXISTS INGRESO_TIPO_VEHICULO_NOMBRE;
 CREATE PROCEDURE INGRESO_TIPO_VEHICULO_NOMBRE
 @TIPO_VEHICULO_NOMBRE VARCHAR(30) 
@@ -790,7 +781,6 @@ SELECT
 FROM EMPLEADO E;
 
 --Procedimiento almacenado de la consulta adicional No.5 pero por id del empleado
-
 CREATE PROCEDURE CANTIDAD_MANTENIMIENTOS_EMPLEADO_ID
     @id_empleado SMALLINT
 AS
@@ -857,10 +847,8 @@ END;
 
 EXEC CANTIDAD_MANTENIMIENTOS_EMPLEADOS;
 
--- Triggers
-
+---- TRIGGERS ----
 -- Se crea una tabla "Reserva"
-
 CREATE TABLE CONTROL_RESERVA (
     id_control INT PRIMARY KEY IDENTITY,
     id_reserva VARCHAR(15),
@@ -869,7 +857,6 @@ CREATE TABLE CONTROL_RESERVA (
 );
 
 -- Trigger despues de hacer un insert
-
 CREATE TRIGGER tr_actualizar_estado_vehiculo_y_control
 ON RESERVA
 AFTER INSERT
@@ -890,7 +877,6 @@ BEGIN
 END;
 
 -- Trigger para Registrar Pago Automático
-
 CREATE TRIGGER tr_pago_automatico_reserva
 ON RESERVA
 AFTER INSERT
@@ -909,10 +895,8 @@ BEGIN
     FROM inserted;
 END;
 
--- Vistas
-
+--- VISTAS ---
 -- Crear vista para obtener todas las reservas que se marcan como "Alquiladas"
-
 CREATE VIEW vista_reservas_actuales AS
 SELECT 
     R.id_reserva,
@@ -936,11 +920,9 @@ WHERE
     AND EV.estado_v = 'Alquilado';
 
 -- Ejecucion de la vista
-
 SELECT * FROM vista_reservas_actuales;
 
 -- Vista de Ingresos Mensuales
-
 CREATE VIEW vista_ingresos_mensuales AS
 SELECT 
     YEAR(fecha_pago) AS anio,
@@ -951,8 +933,6 @@ GROUP BY
     YEAR(fecha_pago),
     MONTH(fecha_pago);
 
-
 -- Ejecutamos la vista
-
 SELECT * FROM vista_ingresos_mensuales
 ORDER BY anio, mes;
