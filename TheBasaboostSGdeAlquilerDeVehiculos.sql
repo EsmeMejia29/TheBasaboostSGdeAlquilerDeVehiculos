@@ -283,7 +283,12 @@ insert into tipo_vehiculo (id_tipo, tipo) values
 (2, 'SUV'),
 (3, 'Hatchback'),
 (4, 'Pick-up'),
-(5, 'Deportivo');
+(5, 'Deportivo'),
+(6, 'Blindado'),
+(7, 'Extra lujoso'),
+(8. 'Buseta'),
+(9, 'Camión'),
+(10, 'SUV XL, tipo Suburban');
 
 -- Estados de vehículo
 insert into estado_vehiculo (id_estado_v, estado_v) values
@@ -358,12 +363,29 @@ insert into mantenimiento (id_mantenimiento, matricula, fecha, descripcion, cost
 ('MT010', 'P567-890', '2024-03-10', 'Ajuste de suspensión', 95.00, 7);
 
 -- Reservas 
-insert into reserva (id_reserva, id_cliente, matricula, fecha_inicio_alquiler, fecha_fin_alquiler, id_estado_r, kilometraje_estimado) values
-('RSV001', 'cli001', 'P123-456', '2024-07-01', '2024-07-07', 'conf', 400),
-('RSV002', 'cli002', 'P234-567', '2024-07-03', '2024-07-10', 'comp', 500),
-('RSV003', 'cli003', 'P345-678', '2024-07-05', '2024-07-12', 'canc', 600),
-('RSV004', 'cli004', 'P456-789', '2024-07-08', '2024-07-14', 'conf', 450),
-('RSV005', 'cli005', 'P567-890', '2024-07-11', '2024-07-18', 'conf', 350);
+
+INSERT INTO reserva (id_reserva, id_cliente, matricula, fecha_inicio_alquiler, fecha_fin_alquiler, id_estado_r, kilometraje_estimado) VALUES
+('RSV006', 'cli006', 'P678-901', '2024-08-01', '2024-08-07', 'conf', 735),
+('RSV007', 'cli007', 'P789-012', '2024-08-03', '2024-08-09', 'canc', 543),
+('RSV008', 'cli008', 'P890-123', '2024-08-05', '2024-08-11', 'canc', 257),
+('RSV009', 'cli009', 'P901-234', '2024-08-07', '2024-08-13', 'conf', 343),
+('RSV010', 'cli010', 'P012-345', '2024-08-09', '2024-08-15', 'comp', 312),
+('RSV011', 'cli011', 'P147-258', '2024-08-11', '2024-08-17', 'comp', 347),
+('RSV012', 'cli012', 'P258-369', '2024-08-13', '2024-08-19', 'conf', 369),
+('RSV013', 'cli013', 'P369-470', '2024-08-15', '2024-08-21', 'canc', 521),
+('RSV014', 'cli014', 'P470-581', '2024-08-17', '2024-08-23', 'conf', 863),
+('RSV015', 'cli015', 'P581-692', '2024-08-19', '2024-08-25', 'canc', 661),
+('RSV016', 'cli016', 'P692-703', '2024-08-21', '2024-08-27', 'comp', 330),
+('RSV017', 'cli017', 'P703-814', '2024-08-23', '2024-08-29', 'comp', 397),
+('RSV018', 'cli018', 'P814-925', '2024-08-25', '2024-08-31', 'comp', 435),
+('RSV019', 'cli019', 'P925-036', '2024-08-27', '2024-09-02', 'conf', 300),
+('RSV020', 'cli020', 'P036-147', '2024-08-29', '2024-09-04', 'canc', 506),
+('RSV021', 'cli021', 'P159-260', '2024-08-31', '2024-09-06', 'canc', 353),
+('RSV022', 'cli022', 'P260-371', '2024-09-02', '2024-09-08', 'canc', 986),
+('RSV023', 'cli023', 'P371-482', '2024-09-04', '2024-09-10', 'canc', 440),
+('RSV024', 'cli024', 'P482-593', '2024-09-06', '2024-09-12', 'comp', 457),
+('RSV025', 'cli025', 'P593-604', '2024-09-08', '2024-09-14', 'comp', 600),
+('RSV026', 'cli026', 'P604-715', '2024-09-10', '2024-09-16', 'conf', 954);
 
 
 -- Servicios adicionales por reserva 
